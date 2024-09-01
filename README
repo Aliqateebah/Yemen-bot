@@ -1,0 +1,385 @@
+
+‏   
+‏
+‏from librouteros import connect
+
+# استبدل القيم أدناه بالقيم الخاصة بجهازك
+‏HOST = '192.168.88.1'
+‏USERNAME = 'admin'
+‏PASSWORD = 'password'
+
+# الاتصال بجهاز المايكروتك
+‏api = connect(HOST, USERNAME, PASSWORD)
+‏print("تم الاتصال بجهاز المايكروتك بنجاح!")
+
+# إضافة مستخدم جديد
+‏def add_user(api, username, password):
+‏    api('user/add', {'name': username, 'password': password})
+‏    print(f"تم إضافة المستخدم: {username}")
+
+# حذف مستخدم
+‏def delete_user(api, username):
+‏    api('user/remove', {'numbers': username})
+‏    print(f"تم حذف المستخدم: {username}")
+
+# تحديث كلمة مرور المستخدم
+‏def update_user_password(api, username, new_password):
+‏    api('user/set', {'numbers': username, 'password': new_password})
+‏    print(f"تم تحديث كلمة مرور المستخدم: {username}")
+
+# عرض قائمة المستخدمين
+‏def list_users(api):
+‏    users = api('/user/print')
+‏    for user in users:
+‏        print(f"اسم المستخدم: {user['name']}")
+
+# مراقبة الشبكة
+‏def monitor_interface(api):
+‏    interfaces = api('/interface/print')
+‏    for interface in interfaces:
+‏        print(f"اسم الواجهة: {interface['name']}, الحالة: {interface['running']}")
+
+# إضافة واجهة جديدة
+‏def add_interface(api, name, type):
+‏    api('/interface/add', {'name': name, 'type': type})
+‏    print(f"تم إضافة الواجهة: {name}")
+
+# حذف واجهة
+‏def delete_interface(api, interface_id):
+‏    api('/interface/remove', {'numbers': interface_id})
+‏    print(f"تم حذف الواجهة: {interface_id}")
+
+# عرض قائمة الواجهات
+‏def list_interfaces(api):
+‏    interfaces = api('/interface/print')
+‏    for interface in interfaces:
+‏        print(f"واجهة: {interface['name']}, خالية: {interface['running']}")
+
+# إعداد جدار الحماية
+‏def add_firewall_rule(api, chain, action):
+‏    api('/ip/firewall/filter/add', {'chain': chain, 'action': action})
+‏    print(f"تم إضافة قاعدة جدار حماية: {chain} - {action}")
+
+# عرض قواعد جدار الحماية
+‏def list_firewall_rules(api):
+‏    rules = api('/ip/firewall/filter/print')
+‏    for rule in rules:
+‏        print(f"قاعدة: {rule['chain']} - {rule['action']}")
+
+# إعداد DHCP
+‏def setup_dhcp(api, address_pool):
+‏    api('/ip/dhcp-server/add', {'address-pool': address_pool})
+‏    print(f"تم إعداد خادم DHCP مع تجميع العناوين: {address_pool}")
+
+# عرض إعدادات DHCP
+‏def list_dhcp_servers(api):
+‏    dhcp_servers = api('/ip/dhcp-server/print')
+‏    for server in dhcp_servers:
+‏        print(f"خادم DHCP: {server['name']}")
+
+# إضافة عنوان IP ثابت
+‏def add_static_ip(api, address, mac_address):
+‏    api('/ip/dhcp-server/static/add', {'address': address, 'mac-address': mac_address})
+‏    print(f"تم إضافة IP ثابت: {address} - {mac_address}")
+
+# عرض العناوين IP الثابتة
+‏def list_static_ips(api):
+‏    static_ips = api('/ip/dhcp-server/static/print')
+‏    for ip in static_ips:
+‏        print(f"IP ثابت: {ip['address']} - MAC: {ip['mac-address']}")
+
+# إعداد VPN
+‏def setup_vpn(api, vpn_type):
+‏    api('/interface/vpn/add', {'type': vpn_type})
+‏    print(f"تم إعداد VPN من النوع: {vpn_type}")
+
+# عرض إعدادات VPN
+‏def list_vpn(api):
+‏    vpns = api('/interface/vpn/print')
+‏    for vpn in vpns:
+‏        print(f"VPN: {vpn['type']}")
+
+# إعداد QoS
+‏def setup_qos(api, queue_name):
+‏    api('/queue/simple/add', {'name': queue_name})
+‏    print(f"تم إعداد QoS: {queue_name}")
+
+# عرض إعدادات QoS
+‏def list_qos(api):
+‏    queues = api('/queue/simple/print')
+‏    for queue in queues:
+‏        print(f"QoS: {queue['name']}")
+
+# إعداد SNMP
+‏def setup_snmp(api):
+‏    api('/snmp/set', {'enabled': 'yes'})
+‏    print("تم تفعيل SNMP")
+
+# عرض إعدادات SNMP
+‏def list_snmp(api):
+‏    snmp_settings = api('/snmp/print')
+‏    for setting in snmp_settings:
+‏        print(f"SNMP: {setting['enabled']}")
+
+# إعداد NAT
+‏def setup_nat(api, action):
+‏    api('/ip/firewall/nat/add', {'action': action})
+‏    print(f"تم إعداد NAT مع الإجراء: {action}")
+
+# عرض إعدادات NAT
+‏def list_nat(api):
+‏    nat_settings = api('/ip/firewall/nat/print')
+‏    for nat in nat_settings:
+‏        print(f"NAT: {nat['action']}")
+
+# إعداد IPsec
+‏def setup_ipsec(api, peer_address):
+‏    api('/ip/ipsec/peer/add', {'address': peer_address})
+‏    print(f"تم إعداد IPsec مع العنوان: {peer_address}")
+
+# عرض إعدادات IPsec
+‏def list_ipsec(api):
+‏    ipsec_peers = api('/ip/ipsec/peer/print')
+‏    for peer in ipsec_peers:
+‏        print(f"IPsec Peer: {peer['address']}")
+
+# إعداد Hotspot
+‏def setup_hotspot(api, hotspot_name):
+‏    api('/ip/hotspot/add', {'name': hotspot_name})
+‏    print(f"تم إعداد Hotspot: {hotspot_name}")
+
+# عرض إعدادات Hotspot
+‏def list_hotspots(api):
+‏    hotspots = api('/ip/hotspot/print')
+‏    for hotspot in hotspots:
+‏        print(f"Hotspot: {hotspot['name']}")
+
+# إعداد VLAN
+‏def setup_vlan(api, vlan_id):
+‏    api('/interface/vlan/add', {'vlan-id': vlan_id})
+‏    print(f"تم إعداد VLAN: {vlan_id}")
+
+# عرض إعدادات VLAN
+‏def list_vlans(api):
+‏    vlans = api('/interface/vlan/print')
+‏    for vlan in vlans:
+‏        print(f"VLAN: {vlan['vlan-id']}")
+
+# إعداد PPPoE
+‏def setup_pppoe(api, service_name):
+‏    api('/interface/pppoe-client/add', {'service-name': service_name})
+‏    print(f"تم إعداد PPPoE: {service_name}")
+
+# عرض إعدادات PPPoE
+‏def list_pppoe(api):
+‏    pppoe_clients = api('/interface/pppoe-client/print')
+‏    for client in pppoe_clients:
+‏        print(f"PPPoE Client: {client['service-name']}")
+
+# إعداد Bridge
+‏def setup_bridge(api, bridge_name):
+‏    api('/interface/bridge/add', {'name': bridge_name})
+‏    print(f"تم إعداد Bridge: {bridge_name}")
+
+# عرض إعدادات Bridge
+‏def list_bridges(api):
+‏    bridges = api('/interface/bridge/print')
+‏    for bridge in bridges:
+‏        print(f"Bridge: {bridge['name']}")
+
+# إعداد DHCP Relay
+‏def setup_dhcp_relay(api, dhcp_server):
+‏    api('/ip/dhcp-relay/add', {'dhcp-server': dhcp_server})
+‏    print(f"تم إعداد DHCP Relay مع الخادم: {dhcp_server}")
+
+# عرض إعدادات DHCP Relay
+‏def list_dhcp_relay(api):
+‏    relays = api('/ip/dhcp-relay/print')
+‏    for relay in relays:
+‏        print(f"DCHP Relay: {relay['dhcp-server']}")
+
+# إعداد MPLS
+‏def setup_mpls(api):
+‏    api('/mpls/interface/add', {})
+‏    print("تم إعداد MPLS")
+
+# عرض إعدادات MPLS
+‏def list_mpls(api):
+‏    mpls_interfaces = api('/mpls/interface/print')
+‏    for interface in mpls_interfaces:
+‏        print(f"MPLS Interface: {interface['name']}")
+
+# إعداد PPP
+‏def setup_ppp(api, name):
+‏    api('/interface/ppp/add', {'name': name})
+‏    print(f"تم إعداد PPP: {name}")
+
+# عرض إعدادات PPP
+‏def list_ppp(api):
+‏    ppp_interfaces = api('/interface/ppp/print')
+‏    for interface in ppp_interfaces:
+‏        print(f"PPP Interface: {interface['name']}")
+
+# إعداد GRE Tunnel
+‏def setup_gre_tunnel(api, local_ip, remote_ip):
+‏    api('/interface/gre/add', {'local-address': local_ip, 'remote-address': remote_ip})
+‏    print(f"تم إعداد GRE Tunnel بين {local_ip} و {remote_ip}")
+
+# عرض إعدادات GRE Tunnels
+‏def list_gre_tunnels(api):
+‏    gre_tunnels = api('/interface/gre/print')
+‏    for tunnel in gre_tunnels:
+‏        print(f"GRE Tunnel: {tunnel['name']}")
+
+# إعداد RADIUS
+‏def setup_radius(api, address, secret):
+‏    api('/radius/add', {'address': address, 'secret': secret})
+‏    print(f"تم إعداد RADIUS مع العنوان: {address}")
+
+# عرض إعدادات RADIUS
+‏def list_radius(api):
+‏    radius_servers = api('/radius/print')
+‏    for server in radius_servers:
+‏        print(f"RADIUS Server: {server['address']}")
+
+# إعداد VLAN Filtering
+‏def setup_vlan_filtering(api, bridge_name):
+‏    api('/interface/bridge/port/add', {'bridge': bridge_name, 'interface': 'vlan'})
+‏    print(f"تم إعداد VLAN Filtering على Bridge: {bridge_name}")
+
+# عرض إعدادات VLAN Filtering
+‏def list_vlan_filtering(api):
+‏    vlan_filters = api('/interface/bridge/port/print')
+‏    for filter in vlan_filters:
+‏        print(f"VLAN Filtering: {filter['bridge']}")
+
+# إعداد Firewall Address List
+‏def setup_address_list(api, list_name, address):
+‏    api('/ip/firewall/address-list/add', {'list': list_name, 'address': address})
+‏    print(f"تم إضافة {address} إلى قائمة العناوين: {list_name}")
+
+# عرض Firewall Address Lists
+‏def list_address_lists(api):
+‏    address_lists = api('/ip/firewall/address-list/print')
+‏    for address_list in address_lists:
+‏        print(f"Address List: {address_list['list']} - {address_list['address']}")
+
+# إعداد DHCP Options
+‏def setup_dhcp_option(api, code, value):
+‏    api('/ip/dhcp-server/option/add', {'code': code, 'value': value})
+‏    print(f"تم إعداد DHCP Option: {code} - {value}")
+
+# عرض DHCP Options
+‏def list_dhcp_options(api):
+‏    dhcp_options = api('/ip/dhcp-server/option/print')
+‏    for option in dhcp_options:
+‏        print(f"DHCP Option: {option['code']} - {option['value']}")
+
+# إعداد Wireless
+‏def setup_wireless(api, ssid):
+‏    api('/interface/wireless/add', {'ssid': ssid})
+‏    print(f"تم إعداد Wireless مع SSID: {ssid}")
+
+# عرض إعدادات Wireless
+‏def list_wireless(api):
+‏    wireless_interfaces = api('/interface/wireless/print')
+‏    for interface in wireless_interfaces:
+‏        print(f"Wireless Interface: {interface['ssid']}")
+
+# إعداد API
+‏def setup_api(api):
+‏    api('/api/set', {'enabled': 'yes'})
+‏    print("تم تفعيل API")
+
+# عرض إعدادات API
+‏def list_api(api):
+‏    api_settings = api('/api/print')
+‏    for setting in api_settings:
+‏        print(f"API: {setting['enabled']}")
+
+# إعداد User Manager
+‏def setup_user_manager(api):
+‏    api('/user-manager/user/add', {})
+‏    print("تم إعداد User Manager")
+
+# عرض إعدادات User Manager
+‏def list_user_manager(api):
+‏    users = api('/user-manager/user/print')
+‏    for user in users:
+‏        print(f"User Manager User: {user['username']}")
+
+# إعداد Traffic Monitor
+‏def setup_traffic_monitor(api):
+‏    api('/interface/traffic-monitor/add', {})
+‏    print("تم إعداد Traffic Monitor")
+
+# عرض إعدادات Traffic Monitor
+‏def list_traffic_monitor(api):
+‏    monitors = api('/interface/traffic-monitor/print')
+‏    for monitor in monitors:
+‏        print(f"Traffic Monitor: {monitor['name']}")
+
+# إعداد Connection Tracking
+‏def setup_connection_tracking(api):
+‏    api('/ip/connection/tracking/set', {'enabled': 'yes'})
+‏    print("تم تفعيل Connection Tracking")
+
+# عرض إعدادات Connection Tracking
+‏def list_connection_tracking(api):
+‏    tracking = api('/ip/connection/tracking/print')
+‏    for conn in tracking:
+‏        print(f"Connection Tracking: {conn['enabled']}")
+
+# إعداد HTTP Proxy
+‏def setup_http_proxy(api):
+‏    api('/ip/proxy/set', {'enabled': 'yes'})
+‏    print("تم تفعيل HTTP Proxy")
+
+# عرض إعدادات HTTP Proxy
+‏def list_http_proxy(api):
+‏    proxy = api('/ip/proxy/print')
+‏    for p in proxy:
+‏        print(f"HTTP Proxy: {p['enabled']}")
+
+# إعداد IPSec Policy
+‏def setup_ipsec_policy(api, src_address, dst_address):
+‏    api('/ip/ipsec/policy/add', {'src-address': src_address, 'dst-address': dst_address})
+‏    print(f"تم إعداد IPSec Policy من {src_address} إلى {dst_address}")
+
+# عرض IPSec Policies
+‏def list_ipsec_policies(api):
+‏    policies = api('/ip/ipsec/policy/print')
+‏    for policy in policies:
+‏        print(f"IPSec Policy: {policy['src-address']} -> {policy['dst-address']}")
+
+# تنفيذ بعض الوظائف
+‏if __name__ == "__main__":
+‏    list_users(api)
+‏    list_interfaces(api)
+‏    list_firewall_rules(api)
+‏    list_dhcp_servers(api)
+‏    list_static_ips(api)
+‏    list_vpn(api)
+‏    list_qos(api)
+‏    list_snmp(api)
+‏    list_nat(api)
+‏    list_ipsec(api)
+‏    list_hotspots(api)
+‏    list_vlans(api)
+‏    list_pppoe(api)
+‏    list_bridges(api)
+‏    list_dhcp_relay(api)
+‏    list_mpls(api)
+‏    list_ppp(api)
+‏    list_gre_tunnels(api)
+‏    list_radius(api)
+‏    list_vlan_filtering(api)
+‏    list_address_lists(api)
+‏    list_dhcp_options(api)
+‏    list_wireless(api)
+‏    list_api(api)
+‏    list_user_manager(api)
+‏    list_traffic_monitor(api)
+‏    list_connection_tracking(api)
+‏    list_http_proxy(api)
+‏    list_ipsec_policies(api)
