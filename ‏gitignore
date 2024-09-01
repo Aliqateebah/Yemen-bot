@@ -1,0 +1,51 @@
+# ملفات Python المؤقتة
+‏__pycache__/
+‏*.py[cod]
+‏*.pyo
+‏*.pyd
+
+# ملفات السجلات
+‏*.log
+
+# ملفات البيئة الافتراضية
+‏venv/
+‏env/
+‏ENV/
+‏.venv/
+
+# ملفات التكوين المحلية
+‏*.env
+
+# ملفات بايثون غير الضرورية
+‏*.egg-info/
+‏*.egg
+
+# مجلدات النظام
+‏.DS_Store
+‏Thumbs.db
+
+# ملفات المحرر
+‏*.swp
+‏*.swo
+‏*.sublime-workspace
+‏*.sublime-project
+
+# ملفات IDE
+‏.idea/
+‏.vscode/
+
+# ملفات النسخ الاحتياطي
+*~
+‏*.bak
+‏*.tmp
+
+# ملفات التكوين الخاصة بالأنظمة
+‏*.local
+
+# ملفات التثبيت
+‏dist/
+‏build/
+
+# ملفات التكوين المخصصة
+‏config.yaml
+‏settings.json
